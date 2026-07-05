@@ -39,8 +39,12 @@ CREATE TABLE messages (
 );
 
 CREATE TABLE message_reads (
-
+    message_id BIGSERIAL REFERENCES messages(message_id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
+    read_at TIMESTAMPZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (message_id, user_id)
 );
+CREATE INDEX idx_message_reads_user_id ON message_reads(user_id);
 
 CREATE INDEX idx_messages_chat_id_created_at ON messages(chat_id, created_at DESC);
 

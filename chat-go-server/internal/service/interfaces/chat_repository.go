@@ -12,6 +12,6 @@ type ChatRepository interface {
 	Delete(ctx context.Context, chatID uuid.UUID) error
 	Rename(ctx context.Context, chatID uuid.UUID, newName string) error
 	GetChatsByUserID(ctx context.Context, userID uuid.UUID) ([]*domain.Chat, error)
-	GetChatsWithMembersByUserID(ctx context.Context, userID uuid.UUID) ([]*domain.ChatWithMembes, error)
+	GetChatsWithMembersByUserID(ctx context.Context, userID uuid.UUID) ([]*domain.ChatWithMembers, error)
 	GetChatByID(ctx context.Context, chatID uuid.UUID) (*domain.Chat, error)
 }
