@@ -11,3 +11,11 @@ func NewChatWithMembers(chat *Chat, members []*ChatMember) *ChatWithMembers {
 		members: members,
 	}
 }
+
+func (c *ChatWithMembers) Chat() *Chat {
+	return c.chat
+}
+
+func (c *ChatWithMembers) Members() []*ChatMember {
+	return c.members
+}

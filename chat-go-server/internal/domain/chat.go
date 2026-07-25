@@ -28,21 +28,21 @@ func (ct ChatType) ToSQLValue() string { return mappedChatTypes[ct] }
 
 type Chat struct {
 	id        uuid.UUID
-	owner     string
+	owner     *uuid.UUID
 	name      string
 	createdAt time.Time
 	chatType  ChatType
 }
 
 func (c *Chat) Id() uuid.UUID        { return c.id }
-func (c *Chat) Owner() string        { return c.owner }
+func (c *Chat) Owner() *uuid.UUID    { return c.owner }
 func (c *Chat) CreatedAt() time.Time { return c.createdAt }
 func (c *Chat) Name() string         { return c.name }
 
-func NewChat(id uuid.UUID, owner, name string, createdAt time.Time, chatType ChatType) *Chat {
+func NewChat(id, owner uuid.UUID, name string, createdAt time.Time, chatType ChatType) *Chat {
 	return &Chat{
 		id:        id,
-		owner:     owner,
+		owner:     &owner,
 		name:      name,
 		createdAt: createdAt,
 		chatType:  chatType,
