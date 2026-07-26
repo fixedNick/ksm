@@ -27,9 +27,9 @@ type IChatRepository interface {
 
 type IMessageRepository interface {
 	Save(ctx context.Context, chatID, senderID uuid.UUID, content string, attachments []string, createdAt time.Time) (*domain.Message, error)
-	EditMessage(ctx context.Context, messageID uint64, content string, attachments []string) (*domain.EditedMessage, error)
+	Edit(ctx context.Context, messageID uint64, content string, attachments []string) (*domain.EditedMessage, error)
 	GetHistory(ctx context.Context, chatID uuid.UUID, limit int, beforeMessageID uint64) ([]*domain.Message, error)
-
+	GetMessageByID(ctx context.Context, messageID uint64) (*domain.Message, error)
 	// Mark message as read for user
 	MarkAsRead(ctx context.Context, messageID uint64, userID uuid.UUID) error
 	// Get user id's who reads a message
@@ -87,8 +87,8 @@ type IChatService interface {
 
 type IMessageService interface {
 	SendMessage(ctx context.Context, chatID, senderID uuid.UUID, content string, attachments []string) (*domain.Message, error)
-	ReadMessage(ctx context.Context, messageID uint64, callerUserID uuid.UUID) error
-	EditMessage(ctx context.Context, messageID uint64, callerUserID uuid.UUID, newContent string, newAttachments []string) (*domain.EditedMessage, error)
-	DeleteMessage(ctx context.Context, messageID uint64, callerUserID uuid.UUID) error
-	GetChatHistory(ctx context.Context, chatID, callerUserID uuid.UUID, limit int, beforeMessageID uint64) ([]*domain.Message, error)
+	ReadMessage(ctx context.Context, messageID uint64, requestFromUserID uuid.UUID) error
+	EditMessage(ctx context.Context, messageID uint64, requestFromUserID uuid.UUID, newContent string, newAttachments []string) (*domain.EditedMessage, error)
+	DeleteMessage(ctx context.Context, messageID uint64, requestFromUserID uuid.UUID) error
+	GetChatHistory(ctx context.Context, chatID, requestFromUserID uuid.UUID, limit int, beforeMessageID uint64) ([]*domain.Message, error)
 }

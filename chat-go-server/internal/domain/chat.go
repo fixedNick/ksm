@@ -27,7 +27,8 @@ var mappedChatTypes = map[ChatType]string{
 func (ct ChatType) ToSQLValue() string { return mappedChatTypes[ct] }
 
 type Chat struct {
-	id        uuid.UUID
+	id uuid.UUID
+	// possibly null if Owner(User)'s account was deleted
 	owner     *uuid.UUID
 	name      string
 	createdAt time.Time
@@ -38,6 +39,7 @@ func (c *Chat) Id() uuid.UUID        { return c.id }
 func (c *Chat) Owner() *uuid.UUID    { return c.owner }
 func (c *Chat) CreatedAt() time.Time { return c.createdAt }
 func (c *Chat) Name() string         { return c.name }
+func (c *Chat) ChatType() ChatType   { return c.chatType }
 
 func NewChat(id, owner uuid.UUID, name string, createdAt time.Time, chatType ChatType) *Chat {
 	return &Chat{
