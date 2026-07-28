@@ -54,4 +54,3 @@ CREATE TABLE device_tokens (
 CREATE INDEX idx_messages_chat_id_created_at ON messages(chat_id, created_at DESC);
 CREATE INDEX idx_message_reads_user_id ON message_reads(user_id);
 CREATE INDEX idx_chat_members_user_id_include_chat ON chat_members(user_id) INCLUDE (chat_id);
-CREATE INDEX idx_chats_id_type ON chats(chat_id, chat_type);
