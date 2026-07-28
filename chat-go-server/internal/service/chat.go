@@ -9,12 +9,14 @@ import (
 )
 
 type ChatService struct {
-	chatRepo IChatRepository
+	chatRepo           IChatRepository
+	transactionManager ITransactionManager
 }
 
-func NewChatService(chatRepo IChatRepository) *ChatService {
+func NewChatService(chatRepo IChatRepository, tm ITransactionManager) *ChatService {
 	return &ChatService{
-		chatRepo: chatRepo,
+		chatRepo:           chatRepo,
+		transactionManager: tm,
 	}
 }
 
@@ -35,7 +37,13 @@ func (cs *ChatService) GetUserChatsWithMembers(ctx context.Context, requestFromU
 // Create new chat user-user
 // Repository checks dependencies of user1->user2/user2->user1 id db, if exist - return error
 func (cs *ChatService) CreatePersonalChat(ctx context.Context, ownerID, targetUserID uuid.UUID) (*domain.Chat, error) {
-	return cs.chatRepo.Create(ctx, ownerID, "", domain.CHAT_TYPE_USER_TO_USER)
+	var chat *domain.Chat
+	err := cs.transactionManager.WithTransaction(ctx, func(ctx context.Context) error {
+		var err error
+		chat, err = cs.chatRepo.Create(ctx, ownerID, "", domain.CHAT_TYPE_USER_TO_USER, []uuid.UUID{ownerID, targetUserID})
+		return err
+	})
+	return chat, err
 }
 
 // Create new group chat, except type CHAT_TYPER_USER_TO_USER
@@ -47,7 +55,17 @@ func (cs *ChatService) CreateGroupChat(ctx context.Context, ownerID uuid.UUID, c
 	if chatName == "" {
 		return nil, fmt.Errorf("group chat name cannot be empty")
 	}
-	return cs.chatRepo.Create(ctx, ownerID, chatName, chatType)
+
+	members := []uuid.UUID{ownerID}
+	members = append(members, membersToAdd...)
+
+	var chat *domain.Chat
+	err := cs.transactionManager.WithTransaction(ctx, func(ctx context.Context) error {
+		var err error
+		chat, err = cs.chatRepo.Create(ctx, ownerID, chatName, chatType, members)
+		return err
+	})
+	return chat, err
 }
 
 func (cs *ChatService) AddMember(ctx context.Context, chatID uuid.UUID, requestFromUserID, targetUserID uuid.UUID) error {

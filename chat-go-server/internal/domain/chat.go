@@ -25,6 +25,22 @@ var mappedChatTypes = map[ChatType]string{
 }
 
 func (ct ChatType) ToSQLValue() string { return mappedChatTypes[ct] }
+func ParseChatType(val string) ChatType {
+	switch val {
+	case "user":
+		return CHAT_TYPE_USER_TO_USER
+	case "public":
+		return CHAT_TYPE_PUBLIC
+	case "private":
+		return CHAT_TYPE_PRIVATE
+	case "public_channel":
+		return CHAT_TYPE_PUBLIC_CHANNEL
+	case "private_channel":
+		return CHAT_TYPE_PRIVATE_CHANNEL
+	default:
+		return -1
+	}
+}
 
 type Chat struct {
 	id uuid.UUID
@@ -41,10 +57,10 @@ func (c *Chat) CreatedAt() time.Time { return c.createdAt }
 func (c *Chat) Name() string         { return c.name }
 func (c *Chat) ChatType() ChatType   { return c.chatType }
 
-func NewChat(id, owner uuid.UUID, name string, createdAt time.Time, chatType ChatType) *Chat {
+func NewChat(id uuid.UUID, owner *uuid.UUID, name string, createdAt time.Time, chatType ChatType) *Chat {
 	return &Chat{
 		id:        id,
-		owner:     &owner,
+		owner:     owner,
 		name:      name,
 		createdAt: createdAt,
 		chatType:  chatType,

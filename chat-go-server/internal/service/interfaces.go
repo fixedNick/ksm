@@ -13,7 +13,7 @@ type ITransactionManager interface {
 }
 
 type IChatRepository interface {
-	Create(ctx context.Context, owner uuid.UUID, chatName string, chatType domain.ChatType) (*domain.Chat, error)
+	Create(ctx context.Context, owner uuid.UUID, chatName string, chatType domain.ChatType, memberIDs []uuid.UUID) (*domain.Chat, error)
 	Delete(ctx context.Context, chatID uuid.UUID) error
 	Rename(ctx context.Context, chatID uuid.UUID, newName string) error
 
