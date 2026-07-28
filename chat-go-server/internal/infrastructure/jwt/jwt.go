@@ -1,8 +1,8 @@
 package jwt
 
 import (
+	"chat/internal/domain"
 	"crypto/rand"
-	"ksm-chat/internal/domain"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"

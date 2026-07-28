@@ -1,9 +1,9 @@
 package service
 
 import (
+	"chat/internal/domain"
 	"context"
 	"fmt"
-	"ksm-chat/internal/domain"
 	"log"
 	"time"
 

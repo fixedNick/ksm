@@ -1,8 +1,8 @@
 package service
 
 import (
+	"chat/internal/domain"
 	"context"
-	"ksm-chat/internal/domain"
 	"time"
 
 	"github.com/google/uuid"

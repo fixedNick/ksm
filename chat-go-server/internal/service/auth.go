@@ -1,11 +1,12 @@
 package service
 
 import (
+	"chat/internal/domain"
+	"chat/internal/infrastructure/jwt"
+	"chat/internal/infrastructure/limits"
 	"context"
 	"fmt"
-	"ksm-chat/internal/domain"
-	"ksm-chat/internal/infrastructure/jwt"
-	"ksm-chat/internal/infrastructure/limits"
+
 	"strings"
 )
 
